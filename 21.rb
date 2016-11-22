@@ -18,16 +18,37 @@ end
 class Player
   include Hand
 
-  def initialize
-  
+  attr_accessor :cards, :name
+
+  def initialize(name)
+    # what would the "data" or "states" of a Player object entail?
+    # maybe cards? a name?
+    @cards = Card.new
+    @name = name
+  end
+
+  def to_s
+    @cards.to_s
   end
 end
 
 class Dealer
   include Hand
  
+  attr_accessor :deck, :player, :dealer_cards
+ 
   def initialize
-  
+    # seems like very similar to Player... do we even need this?
+    @deck = Deck.new
+    @player = Player.new("Jae")
+    @dealer_cards = Card.new
+  end
+ 
+  def deal
+    2.times do
+      player.cards << deck.deal_a_card
+      dealer_cards << deck.deal_a_card
+    end
   end
 end
 
@@ -44,34 +65,48 @@ class Deck
   def initialize
     @deck = SUITS.product(VALUES).shuffle
   end
-
-  def deal
-    2.times do
-      p deck.sample
-    end
+  
+  def deal_a_card
+    deck.pop
   end
 end
 
 class Card 
+  attr_accessor :cards
+ 
   def initialize
-    
+    # what are the "states" of a card?
+    @cards = []
+  end
+
+  def <<(other)
+    cards << other
+  end
+
+  def to_s
+    @cards.to_s
   end
 end
 
 class Game
-  attr_reader :deck
-  
+  attr_reader :dealer
+ 
   def initialize
-    @deck = Deck.new
+    @dealer = Dealer.new
+  end
+ 
+  def deal_cards
+    dealer.deal
   end
 
-  def deal_cards
-    deck.deal
+  def show_initial_cards
+    puts "Player has #{dealer.player.cards}"
+    puts "Dealer has #{dealer.dealer_cards}"
   end
 
   def start
     deal_cards
-    #show_initial_cards
+    show_initial_cards
     #player_turn
     #dealer_turn
     #show_result
