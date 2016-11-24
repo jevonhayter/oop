@@ -119,15 +119,21 @@ class Game
   end
 
   def show_initial_cards
-    puts "Player has #{player.deck.cards}"
-    puts "Dealer has #{dealer.deck.cards}"
+    puts "Player has #{player.deck.cards} for a total amount of: #{player_card_value}"
+    puts "Dealer has #{dealer.deck.cards} for a total amount of: #{dealer_card_value}"
+  end
+
+  def player_card_value
+    player.total(player.dealt_cards)
+  end
+
+  def dealer_card_value
+    dealer.total(dealer.dealt_cards)
   end
 
   def start
     deal_cards
     show_initial_cards
-    p player.total(player.dealt_cards)
-    p dealer.total(dealer.dealt_cards)
     #player_turn
     #dealer_turn
     #show_result
