@@ -1,5 +1,9 @@
+require 'pry'
+
 module Hand
-  def hit
+  def hit(cards)
+    cards << deck.deal_a_card
+    cards
   end
 
   def stay
@@ -44,11 +48,13 @@ end
 class Player
   include Hand
   attr_accessor :deck
+  attr_reader :name
 
-  def initialize
+  def initialize(name)
     # what would the "data" or "states" of a Player object entail?
     # maybe cards? a name?
     @deck = Deck.new
+    @name = name
   end
 end
 
@@ -110,17 +116,7 @@ class Game
 
   def initialize
     @dealer = Dealer.new
-    @player = Player.new 
-  end
-
-  def deal_cards
-    player.deck.deal
-    dealer.deck.deal
-  end
-
-  def show_initial_cards
-    puts "Player has #{player.deck.cards} for a total amount of: #{player_card_value}"
-    puts "Dealer has #{dealer.deck.cards} for a total amount of: #{dealer_card_value}"
+    @player = Player.new("Jae") 
   end
 
   def player_card_value
@@ -131,14 +127,41 @@ class Game
     dealer.total(dealer.dealt_cards)
   end
 
+  def deal_cards
+    player.deck.deal
+    dealer.deck.deal
+  end
+
+  def show_initial_cards
+    puts "#{player.name} has #{player.deck.cards} for a total amount of: #{player_card_value}"
+    puts "Dealer has #{dealer.deck.cards} for a total amount of: #{dealer_card_value}"
+    ""
+    ""
+  end
+
+  def player_turn
+    puts "#{player.name} would you like a Hit (h) or Stay (s) ?"
+    answer = nil
+    loop do
+      answer = gets.chomp.downcase
+      break if %w(h s).include? answer
+      puts "Please choose to Hit(h) or Stay(s)!"
+    end
+    answer
+
+    if answer.include?("h")
+      p player.hit(player.deck.cards)
+      p player.total(player.hit(player.deck.cards))
+    end
+  end
+
   def start
     deal_cards
     show_initial_cards
-    #player_turn
+    player_turn
     #dealer_turn
     #show_result
   end
 end
-#dealer = Dealer.new
-#p dealer.deck.deal
+
 Game.new.start
