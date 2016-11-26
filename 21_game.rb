@@ -16,7 +16,7 @@ module Hand
 
     sum = 0 
     values.each do |value| 
-     if value == "A" 
+     if value.include?('A')
       sum += 11 
      elsif value.to_i == 0 # J, Q, K 
        sum += 10 
@@ -26,7 +26,7 @@ module Hand
     end 
 
     # correct for Aces 
-    values.select { |value| value == "A" }.count.times do 
+    values.select { |value| value == 'A' }.count.times do 
      sum -= 10 if sum > 21 
     end 
 
@@ -76,7 +76,7 @@ end
 
 
 class Deck
-  SUITS = ['H', 'D', 'S', 'C']
+  SUITS = %w(H D S C).freeze
   VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
   attr_reader :deck
@@ -147,13 +147,13 @@ class Game
 
     case result
     when :player_busted
-      puts "You busted! Dealer wins!"
+      puts 'You busted! Dealer wins!'
     when :dealer_busted
-      puts "Dealer busted! You win!"
+      puts 'Dealer busted! You win!'
     when :player
-      puts "You win!"
+      puts 'You win!'
     when :dealer
-      puts "Dealer wins!"
+      puts 'Dealer wins!'
     when :tie
       puts "It's a tie!"
     end
@@ -182,8 +182,7 @@ class Game
         break if %w(h s).include? answer
         puts "Please choose to Hit(h) or Stay(s)!"
       end
-      answer
-
+      
       if answer == "h"
         dealer.hit(dealer.player.cards)
         puts "You chose to hit!"
@@ -203,14 +202,14 @@ class Game
   end
 
   def dealer_turn
-    puts "Dealer turn..."
+    puts 'Dealer turn...'
 
     loop do
       break if dealer.busted?(dealer.cards) || dealer.total(dealer.cards) >= 17
 
-        puts "Dealer hits!"
-        dealer.hit(dealer.cards)
-        puts "Dealer's cards are now: #{dealer.cards}"
+      puts 'Dealer hits!'
+      dealer.hit(dealer.cards)
+      puts "Dealer's cards are now: #{dealer.cards}"
     end
 
     if dealer.busted?(dealer.cards)
@@ -224,15 +223,15 @@ class Game
 
   def show_result
      # both player and dealer stays - compare cards!
-    puts "=============="
+    puts '=============='
     puts "Dealer has #{dealer.cards}, for a total of: #{dealer.total(dealer.cards)}"
     puts "Player has #{dealer.player_cards}, for a total of: #{dealer.total(dealer.player_cards)}"
-    puts "==============" 
+    puts '=============='
 
     display_result(dealer.cards, dealer.player_cards)
   end
 
-  puts "Thank you for playing Twenty-One! Good bye!"
+  puts 'Thank you for playing Twenty-One! Good bye!'
 
   def start
     deal_cards
