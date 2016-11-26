@@ -1,5 +1,3 @@
-require 'pry'
-
 module Hand
   def hit(cards)
     cards << deal_a_card
@@ -27,13 +25,12 @@ module Hand
      end 
     end 
 
-  # correct for Aces 
-  values.select { |value| value == "A" }.count.times do 
-   sum -= 10 if sum > 21 
-  end 
+    # correct for Aces 
+    values.select { |value| value == "A" }.count.times do 
+     sum -= 10 if sum > 21 
+    end 
 
-  sum 
-
+    sum 
   end 
 end
 
