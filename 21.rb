@@ -2,7 +2,7 @@ require 'pry'
 
 module Hand
   def hit(cards)
-    cards << deck.deal_a_card
+    cards << deck.deal_a_card)
     cards
   end
 
